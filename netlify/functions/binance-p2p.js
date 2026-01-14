@@ -1,4 +1,6 @@
 export async function handler(event) {
+  const BINANCE_URL = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search";
+
   try {
     const { asset = "USDT" } = event.queryStringParameters || {};
 
@@ -8,21 +10,18 @@ export async function handler(event) {
       tradeType: "SELL",
       page: 1,
       rows: 5,
-      payTypes: [],
+      payTypes: ["PagoMovil"],
       publisherType: null
     };
 
-    const response = await fetch(
-      "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "User-Agent": "Mozilla/5.0"
-        },
-        body: JSON.stringify(payload)
-      }
-    );
+    const response = await fetch(BINANCE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0"
+      },
+      body: JSON.stringify(payload)
+    });
 
     const data = await response.json();
 
