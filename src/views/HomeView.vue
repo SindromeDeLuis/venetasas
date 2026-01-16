@@ -105,12 +105,12 @@ const rateList = computed(() => {
       items: [
         {
           key: "usd",
-          label: "USD Oficial (BCV)",
+          label: "USD Oficial",
           rate: rates.value.bcv.usd
         },
         {
           key: "eur",
-          label: "EUR Oficial (BCV)",
+          label: "EUR Oficial",
           rate: rates.value.bcv.eur
         }
       ],
@@ -122,7 +122,7 @@ const rateList = computed(() => {
       items: [
         {
           key: "usdtbuy",
-          label: "USDT Compra (Binance)",
+          label: "USDT Compra",
           rate: rates.value.binance.usdt.buy,
           diff: percentageDiff(
             rates.value.binance.usdt.buy,
@@ -131,7 +131,7 @@ const rateList = computed(() => {
         },
         {
           key: "usdtsell",
-          label: "USDT Venta (Binance)",
+          label: "USDT Venta",
           rate: rates.value.binance.usdt.sell,
           diff: percentageDiff(
             rates.value.binance.usdt.sell,
@@ -140,7 +140,7 @@ const rateList = computed(() => {
         },
         {
           key: "usdcbuy",
-          label: "USDC Compra (Binance)",
+          label: "USDC Compra",
           rate: rates.value.binance.usdc.buy,
           diff: percentageDiff(
             rates.value.binance.usdc.buy,
@@ -149,7 +149,7 @@ const rateList = computed(() => {
         },
         {
           key: "usdcsell",
-          label: "USDC Venta (Binance)",
+          label: "USDC Venta",
           rate: rates.value.binance.usdc.sell,
           diff: percentageDiff(
             rates.value.binance.usdc.sell,
