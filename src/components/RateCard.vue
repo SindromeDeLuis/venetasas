@@ -1,8 +1,9 @@
 <template>
   <div class="card rate-card h-100 shadow-sm" :class="{ 'best-rate': highlight }">
     <div class="card-body p-2">
-      <h6 class="card-title mb-1 text-truncate">
+      <h6 class="card-title mb-1 d-flex align-items-center gap-1">
         {{ title }}
+        <span v-if="hot" class="hot-emoji">🔥</span>
       </h6>
 
       <Transition name="fade-scale" mode="out-in">
@@ -41,7 +42,8 @@ const props = defineProps({
   value: Number,
   diff: Number,
   mode: String,
-  highlight: Boolean
+  highlight: Boolean,
+  hot: Boolean
 });
 
 const unit = computed(() =>
@@ -57,3 +59,15 @@ const diffClass = computed(() => ({
   "text-danger": props.diff < 0
 }));
 </script>
+
+<style scoped>
+.hot-emoji {
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+</style>

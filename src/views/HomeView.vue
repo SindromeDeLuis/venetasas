@@ -59,6 +59,7 @@
             :mode="mode"
             :highlight="item.key === bestRateKey"
             :updatedAt="item.updatedAt"
+            :hot="item.diff && Math.abs(item.diff) <= HOT_THRESHOLD"
           />
         </div>
       </div>
@@ -93,6 +94,8 @@ const binanceUpdatedAt = ref(null)
 
 const loading = ref(false);
 const error = ref(null);
+
+const HOT_THRESHOLD = 35;
 
 const rateList = computed(() => {
   if (!rates.value) return [];
