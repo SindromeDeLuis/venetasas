@@ -16,6 +16,6 @@ export async function getBCVRates() {
   return {
     usd: Number(data.current.usd),
     eur: Number(data.current.eur),
-    date: data.current.date
+    updatedAt: data.current.date
   };
 }

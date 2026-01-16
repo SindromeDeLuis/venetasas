@@ -36,6 +36,7 @@ export async function getBinanceRates() {
     usdc: {
       buy: usdcBuy,
       sell: usdcSell
-    }
+    },
+    updatedAt: new Date().toISOString()
   };
 }

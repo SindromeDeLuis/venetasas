@@ -46,6 +46,7 @@
           :diff="item.diff"
           :mode="mode"
           :highlight="item.key === bestRateKey"
+          :updatedAt="item.updatedAt"
         />
       </div>
     </div>
@@ -62,7 +63,6 @@ import RateCard from "@/components/RateCard.vue";
 import { getAllRates } from "@/services/rates.service";
 import {
   percentageDiff,
-  calculateValue,
   cashBuyPrice,
   convert
 } from "@/utils/calculations";
@@ -74,6 +74,7 @@ const { theme, toggleTheme } = useTheme();
 const base = ref(1);
 const mode = ref("USD");
 const rates = ref(null);
+
 const loading = ref(false);
 const error = ref(null);
 
@@ -84,12 +85,14 @@ const rateList = computed(() => {
     {
       key: "usd",
       label: "USD Oficial (BCV)",
-      rate: rates.value.bcv.usd
+      rate: rates.value.bcv.usd,
+      updatedAt: rates.value.bcv.updatedAt
     },
     {
       key: "eur",
       label: "EUR Oficial (BCV)",
-      rate: rates.value.bcv.eur
+      rate: rates.value.bcv.eur,
+      updatedAt: rates.value.bcv.updatedAt
     },
     {
       key: "usdtbuy",
@@ -98,7 +101,8 @@ const rateList = computed(() => {
       diff: percentageDiff(
         rates.value.binance.usdt.buy,
         rates.value.bcv.usd
-      )
+      ),
+      updatedAt: rates.value.binance.updatedAt
     },
     {
       key: "usdtsell",
@@ -107,7 +111,8 @@ const rateList = computed(() => {
       diff: percentageDiff(
         rates.value.binance.usdt.sell,
         rates.value.bcv.usd
-      )
+      ),
+      updatedAt: rates.value.binance.updatedAt
     },
     {
       key: "usdcbuy",
@@ -116,7 +121,8 @@ const rateList = computed(() => {
       diff: percentageDiff(
         rates.value.binance.usdc.buy,
         rates.value.bcv.usd
-      )
+      ),
+      updatedAt: rates.value.binance.updatedAt
     },
     {
       key: "usdcsell",
@@ -125,10 +131,20 @@ const rateList = computed(() => {
       diff: percentageDiff(
         rates.value.binance.usdc.sell,
         rates.value.bcv.usd
+      ),
+      updatedAt: rates.value.binance.updatedAt
+    },
+    {
+      key: "cash1",
+      label: "Compra efectivo (BCV+35%)",
+      rate: cashBuyPrice(rates.value.bcv.usd, -35),
+      diff: percentageDiff(
+        cashBuyPrice(rates.value.bcv.usd, -35),
+        rates.value.bcv.usd
       )
     },
     {
-      key: "cash",
+      key: "cash2",
       label: "Compra efectivo (USDT-15%)",
       rate: cashBuyPrice(rates.value.binance.usdt.sell, 15),
       diff: percentageDiff(
@@ -151,27 +167,6 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
-});
-
-const diffUSDT = computed(() => {
-  if (!rates.value) return null;
-  return percentageDiff(
-    rates.value.binance.usdt,
-    rates.value.bcv.usd
-  );
-});
-
-const diffUSDC = computed(() => {
-  if (!rates.value) return null;
-  return percentageDiff(
-    rates.value.binance.usdc,
-    rates.value.bcv.usd
-  );
-});
-
-const cashUSDT = computed(() => {
-  if (!rates.value) return null;
-  return cashBuyPrice(rates.value.binance.usdt, 15);
 });
 
 const bestRateKey = computed(() => {
