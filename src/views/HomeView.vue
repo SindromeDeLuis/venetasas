@@ -202,9 +202,13 @@ onMounted(async () => {
 });
 
 const bestRateKey = computed(() => {
-  if (!rateList.value.length) return null;
+  const binanceSection = rateList.value.find(
+    s => s.key === 'binance'
+  )
 
-  const sorted = [...rateList.value].sort((a, b) =>
+  if (!binanceSection?.items?.length) return null;
+
+  const sorted = [...binanceSection.items].sort((a, b) =>
     mode.value === "USD"
       ? b.rate - a.rate
       : a.rate - b.rate
