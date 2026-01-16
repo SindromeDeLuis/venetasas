@@ -32,25 +32,37 @@
       {{ error }}
     </div>
 
-    <!-- Cards -->
-     <div class="row g-2">
-      <div
-        v-for="item in rateList"
-        :key="item.key"
-        class="col-6 col-md-3"
-      >
-        <RateCard
-          :title="item.label"
-          :rate="item.rate"
-          :value="convert(base, item.rate, mode)"
-          :diff="item.diff"
-          :mode="mode"
-          :highlight="item.key === bestRateKey"
-          :updatedAt="item.updatedAt"
-        />
+    <div
+      v-for="section in rateList"
+      :key="section.key"
+      class="mb-4"
+    >
+
+      <!-- Header de la sección -->
+      <SectionHeader
+        :title="section.title"
+        :updated-at="section.updatedAt"
+      />
+
+      <!-- Cards -->
+      <div class="row g-2">
+        <div
+          v-for="item in section.items"
+          :key="item.key"
+          class="col-6 col-md-3"
+        >
+          <RateCard
+            :title="item.label"
+            :rate="item.rate"
+            :value="convert(base, item.rate, mode)"
+            :diff="item.diff"
+            :mode="mode"
+            :highlight="item.key === bestRateKey"
+            :updatedAt="item.updatedAt"
+          />
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -59,6 +71,7 @@ import { ref, computed, onMounted } from "vue";
 
 import BaseInput from "@/components/BaseInput.vue";
 import RateCard from "@/components/RateCard.vue";
+import SectionHeader from '@/components/SectionHeader.vue'
 
 import { getAllRates } from "@/services/rates.service";
 import {
@@ -75,6 +88,9 @@ const base = ref(1);
 const mode = ref("USD");
 const rates = ref(null);
 
+const bcvUpdatedAt = ref(null)
+const binanceUpdatedAt = ref(null)
+
 const loading = ref(false);
 const error = ref(null);
 
@@ -83,74 +99,88 @@ const rateList = computed(() => {
 
   return [
     {
-      key: "usd",
-      label: "USD Oficial (BCV)",
-      rate: rates.value.bcv.usd,
-      updatedAt: rates.value.bcv.updatedAt
+      key: 'bcv',
+      title: 'BCV',
+      updatedAt: bcvUpdatedAt.value,
+      items: [
+        {
+          key: "usd",
+          label: "USD Oficial (BCV)",
+          rate: rates.value.bcv.usd
+        },
+        {
+          key: "eur",
+          label: "EUR Oficial (BCV)",
+          rate: rates.value.bcv.eur
+        }
+      ],
     },
     {
-      key: "eur",
-      label: "EUR Oficial (BCV)",
-      rate: rates.value.bcv.eur,
-      updatedAt: rates.value.bcv.updatedAt
+      key: 'binance',
+      title: 'Binance P2P',
+      updatedAt: binanceUpdatedAt.value,
+      items: [
+        {
+          key: "usdtbuy",
+          label: "USDT Compra (Binance)",
+          rate: rates.value.binance.usdt.buy,
+          diff: percentageDiff(
+            rates.value.binance.usdt.buy,
+            rates.value.bcv.usd
+          )
+        },
+        {
+          key: "usdtsell",
+          label: "USDT Venta (Binance)",
+          rate: rates.value.binance.usdt.sell,
+          diff: percentageDiff(
+            rates.value.binance.usdt.sell,
+            rates.value.bcv.usd
+          )
+        },
+        {
+          key: "usdcbuy",
+          label: "USDC Compra (Binance)",
+          rate: rates.value.binance.usdc.buy,
+          diff: percentageDiff(
+            rates.value.binance.usdc.buy,
+            rates.value.bcv.usd
+          )
+        },
+        {
+          key: "usdcsell",
+          label: "USDC Venta (Binance)",
+          rate: rates.value.binance.usdc.sell,
+          diff: percentageDiff(
+            rates.value.binance.usdc.sell,
+            rates.value.bcv.usd
+          )
+        },
+      ]
     },
     {
-      key: "usdtbuy",
-      label: "USDT Compra (Binance)",
-      rate: rates.value.binance.usdt.buy,
-      diff: percentageDiff(
-        rates.value.binance.usdt.buy,
-        rates.value.bcv.usd
-      ),
-      updatedAt: rates.value.binance.updatedAt
-    },
-    {
-      key: "usdtsell",
-      label: "USDT Venta (Binance)",
-      rate: rates.value.binance.usdt.sell,
-      diff: percentageDiff(
-        rates.value.binance.usdt.sell,
-        rates.value.bcv.usd
-      ),
-      updatedAt: rates.value.binance.updatedAt
-    },
-    {
-      key: "usdcbuy",
-      label: "USDC Compra (Binance)",
-      rate: rates.value.binance.usdc.buy,
-      diff: percentageDiff(
-        rates.value.binance.usdc.buy,
-        rates.value.bcv.usd
-      ),
-      updatedAt: rates.value.binance.updatedAt
-    },
-    {
-      key: "usdcsell",
-      label: "USDC Venta (Binance)",
-      rate: rates.value.binance.usdc.sell,
-      diff: percentageDiff(
-        rates.value.binance.usdc.sell,
-        rates.value.bcv.usd
-      ),
-      updatedAt: rates.value.binance.updatedAt
-    },
-    {
-      key: "cash1",
-      label: "Compra efectivo (BCV+35%)",
-      rate: cashBuyPrice(rates.value.bcv.usd, -35),
-      diff: percentageDiff(
-        cashBuyPrice(rates.value.bcv.usd, -35),
-        rates.value.bcv.usd
-      )
-    },
-    {
-      key: "cash2",
-      label: "Compra efectivo (USDT-15%)",
-      rate: cashBuyPrice(rates.value.binance.usdt.sell, 15),
-      diff: percentageDiff(
-        cashBuyPrice(rates.value.binance.usdt.sell, 15),
-        rates.value.bcv.usd
-      )
+      key: 'cash',
+      title: 'Indicadores de compra en efectivo',
+      items: [
+        {
+          key: "cash1",
+          label: "BCV +35%",
+          rate: cashBuyPrice(rates.value.bcv.usd, -35),
+          diff: percentageDiff(
+            cashBuyPrice(rates.value.bcv.usd, -35),
+            rates.value.bcv.usd
+          )
+        },
+        {
+          key: "cash2",
+          label: "USDT -15%",
+          rate: cashBuyPrice(rates.value.binance.usdt.sell, 15),
+          diff: percentageDiff(
+            cashBuyPrice(rates.value.binance.usdt.sell, 15),
+            rates.value.bcv.usd
+          )
+        }
+      ]
     }
   ];
 });
@@ -162,6 +192,8 @@ onMounted(async () => {
 
   try {
     rates.value = await getAllRates();
+    bcvUpdatedAt.value = rates.value.bcv.updatedAt;
+    binanceUpdatedAt.value = rates.value.binance.updatedAt;
   } catch (err) {
     error.value = "No se pudieron cargar las tasas";
   } finally {

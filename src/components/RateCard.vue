@@ -28,21 +28,12 @@
       >
         {{ diff.toFixed(2) }}%
       </div>
-
-      <div
-        v-if="updatedAt"
-        class="small text-muted mt-1"
-      >
-        Actualizado:
-        {{ formattedDate }}
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from "vue";
-import { formatDate } from '@/utils/date'
 
 const props = defineProps({
   title: String,
@@ -50,8 +41,7 @@ const props = defineProps({
   value: Number,
   diff: Number,
   mode: String,
-  highlight: Boolean,
-  updatedAt: String
+  highlight: Boolean
 });
 
 const unit = computed(() =>
@@ -66,8 +56,4 @@ const diffClass = computed(() => ({
   "text-success": props.diff > 0,
   "text-danger": props.diff < 0
 }));
-
-const formattedDate = computed(() =>
-  formatDate(props.updatedAt)
-)
 </script>
