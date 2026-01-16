@@ -2,12 +2,15 @@ export async function handler(event) {
   const BINANCE_URL = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search";
 
   try {
-    const { asset = "USDT" } = event.queryStringParameters || {};
+    const {
+      asset = "USDT",
+      tradeType = "SELL"
+    } = event.queryStringParameters || {};
 
     const payload = {
       asset,
       fiat: "VES",
-      tradeType: "SELL",
+      tradeType,
       page: 1,
       rows: 5,
       payTypes: ["PagoMovil"],

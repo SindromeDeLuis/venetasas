@@ -93,26 +93,48 @@ const rateList = computed(() => {
     },
     {
       key: "usdt",
-      label: "USDT Binance",
-      rate: rates.value.binance.usdt,
+      label: "USDT Compra (Binance)",
+      rate: rates.value.binance.usdt.buy,
       diff: percentageDiff(
-        rates.value.binance.usdt,
+        rates.value.binance.usdt.buy,
+        rates.value.bcv.usd
+      )
+    },
+    {
+      key: "usdt",
+      label: "USDT Venta (Binance)",
+      rate: rates.value.binance.usdt.sell,
+      diff: percentageDiff(
+        rates.value.binance.usdt.sell,
         rates.value.bcv.usd
       )
     },
     {
       key: "usdc",
-      label: "USDC Binance",
+      label: "USDC Compra (Binance)",
       rate: rates.value.binance.usdc,
       diff: percentageDiff(
-        rates.value.binance.usdc,
+        rates.value.binance.usdc.buy,
+        rates.value.bcv.usd
+      )
+    },
+    {
+      key: "usdc",
+      label: "USDC Venta (Binance)",
+      rate: rates.value.binance.usdc.sell,
+      diff: percentageDiff(
+        rates.value.binance.usdc.sell,
         rates.value.bcv.usd
       )
     },
     {
       key: "cash",
-      label: "Compra efectivo (-15%)",
-      rate: cashBuyPrice(rates.value.binance.usdt, 15)
+      label: "Compra efectivo (USDT-15%)",
+      rate: cashBuyPrice(rates.value.binance.usdt.sell, 15),
+      diff: percentageDiff(
+       cashBuyPrice(rates.value.binance.usdt.sell, 15),
+        rates.value.bcv.usd
+      )
     }
   ];
 });

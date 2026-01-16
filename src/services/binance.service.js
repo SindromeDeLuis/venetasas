@@ -1,7 +1,7 @@
 const PROXY_URL = "/.netlify/functions/binance-p2p";
 
-async function getAverageP2PPrice(asset) {
-  const response = await fetch(`${PROXY_URL}?asset=${asset}`);
+async function getAverageP2PPrice(asset, tradeType = "SELL") {
+  const response = await fetch(`${PROXY_URL}?asset=${asset}&tradeType=${tradeType}`);
   if (!response.ok) {
     throw new Error("Error proxy Binance");
   }
@@ -16,10 +16,26 @@ async function getAverageP2PPrice(asset) {
 }
 
 export async function getBinanceRates() {
-  const [usdt, usdc] = await Promise.all([
-    getAverageP2PPrice("USDT"),
-    getAverageP2PPrice("USDC")
+  const [
+    usdtBuy,
+    usdtSell,
+    usdcBuy,
+    usdcSell
+  ] = await Promise.all([
+    getAverageP2PPrice("USDT", "BUY"),
+    getAverageP2PPrice("USDT", "SELL"),
+    getAverageP2PPrice("USDC", "BUY"),
+    getAverageP2PPrice("USDC", "SELL")
   ]);
 
-  return { usdt, usdc };
+  return {
+    usdt: {
+      buy: usdtBuy,
+      sell: usdtSell
+    },
+    usdc: {
+      buy: usdcBuy,
+      sell: usdcSell
+    }
+  };
 }
