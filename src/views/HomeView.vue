@@ -166,7 +166,25 @@ const rateList = computed(() => {
       title: 'Indicadores de compra en efectivo',
       items: [
         {
+          key: "cash0",
+          label: "USDT -10%",
+          rate: cashBuyPrice(rates.value.binance.usdt.sell, 10),
+          diff: percentageDiff(
+            cashBuyPrice(rates.value.binance.usdt.sell, 10),
+            rates.value.bcv.usd
+          )
+        },
+        {
           key: "cash1",
+          label: "USDT -15%",
+          rate: cashBuyPrice(rates.value.binance.usdt.sell, 15),
+          diff: percentageDiff(
+            cashBuyPrice(rates.value.binance.usdt.sell, 15),
+            rates.value.bcv.usd
+          )
+        },
+        {
+          key: "cash2",
           label: "BCV +35%",
           rate: cashBuyPrice(rates.value.bcv.usd, -35),
           diff: percentageDiff(
@@ -174,15 +192,6 @@ const rateList = computed(() => {
             rates.value.bcv.usd
           )
         },
-        {
-          key: "cash2",
-          label: "USDT -15%",
-          rate: cashBuyPrice(rates.value.binance.usdt.sell, 15),
-          diff: percentageDiff(
-            cashBuyPrice(rates.value.binance.usdt.sell, 15),
-            rates.value.bcv.usd
-          )
-        }
       ]
     }
   ];
