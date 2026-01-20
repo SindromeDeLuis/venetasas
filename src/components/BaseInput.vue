@@ -6,11 +6,11 @@
         Cantidad
       </label>
 
-      <div class="position-relative">
+      <div class="input-group input-group-sm">
         <input
           type="number"
           id="cantidad"
-          class="form-control form-control-sm pe-5"
+          class="form-control form-control-sm"
           min="0"
           step="0.01"
           :value="modelValue"
@@ -21,7 +21,7 @@
         <button
           :disabled="modelValue === 1"
           type="button"
-          class="btn btn-sm position-absolute top-50 end-0 translate-middle-y"
+          class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center"
           @click="reset"
           aria-label="Reiniciar valor"
         >
