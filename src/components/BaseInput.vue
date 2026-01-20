@@ -1,22 +1,37 @@
 <template>
   <div class="row g-2 mb-3 align-items-end">
     <!-- Cantidad -->
-    <div class="col-8">
-      <label class="form-label fw-semibold">
+    <div class="col-8 col-md-9">
+      <label class="form-label fw-semibold" for="cantidad">
         Cantidad
       </label>
-      <input
-        type="number"
-        class="form-control form-control-sm"
-        min="0"
-        step="0.01"
-        :value="modelValue"
-        @input="onInput"
-      />
+
+      <div class="position-relative">
+        <input
+          type="number"
+          id="cantidad"
+          class="form-control form-control-sm pe-5"
+          min="0"
+          step="0.01"
+          :value="modelValue"
+          @input="onInput"
+        />
+
+        <!-- Reset -->
+        <button
+          :disabled="modelValue === 1"
+          type="button"
+          class="btn btn-sm position-absolute top-50 end-0 translate-middle-y"
+          @click="reset"
+          aria-label="Reiniciar valor"
+        >
+          ⟲
+        </button>
+      </div>
     </div>
 
     <!-- Modo -->
-    <div class="col-4">
+    <div class="col-4 col-md-3">
       <label class="form-label fw-semibold">
         Calcular en
       </label>
@@ -55,5 +70,9 @@ function onInput(e) {
 
 function onModeChange(e) {
   emit("update:mode", e.target.value);
+}
+
+function reset() {
+  emit('update:modelValue', 1)
 }
 </script>
