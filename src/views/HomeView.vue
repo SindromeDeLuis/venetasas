@@ -1,20 +1,22 @@
 <template>
   <div class="container py-3 min-vh-100">
     
-    <button
-      class="btn btn-sm btn-outline-secondary mb-3"
-      @click="toggleTheme"
-    >
-      {{ theme === "dark" ? "🌙 Oscuro" : "☀️ Claro" }}
-    </button>
-
-    <!-- Header -->
-    <div class="mb-4">
-      <h1 class="fw-bold">Tasas de cambio VES</h1>
-      <p class="text-muted mb-0">
-        BCV vs Binance P2P
-      </p>
-    </div>
+    <header class="app-header d-flex align-items-center justify-content-between mb-3">
+      <!-- Header -->
+      <div class="mb-1">
+        <h1 class="fw-bold">Tasas de cambio VES</h1>
+        <p class="text-muted mb-0">
+          BCV vs Binance P2P
+        </p>
+      </div>
+      
+      <button
+        class="btn btn-sm btn-outline-secondary theme-toggle"
+        @click="toggleTheme"
+      >
+        {{ theme === "dark" ? "🌙" : "☀️" }}
+      </button>
+    </header>
 
     <!-- Input base -->
     <BaseInput
