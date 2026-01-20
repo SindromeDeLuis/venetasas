@@ -76,6 +76,7 @@ const variationClass = computed(() => {
 })
 
 const diffClass = computed(() => ({
+  "text-warning":props.diff > 35,
   "text-success": props.diff > 0,
   "text-danger": props.diff < 0
 }));
