@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.leonhart.venetasas",
+      "sha256_cert_fingerprints": [
+        "6A:D4:C7:99:34:D4:34:9E:0B:F0:81:F6:D3:84:0E:89:78:3D:E4:9C:19:EA:58:FF:D0:4E:F7:9E:2C:C2:2A:D9"
+      ]
+    }
+  }
+]
