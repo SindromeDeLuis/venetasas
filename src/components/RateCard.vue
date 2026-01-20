@@ -20,6 +20,14 @@
 
       <div class="small text-muted">
         Tasa: {{ rate.toFixed(2) }}
+        <span
+          v-if="variation !== undefined"
+          class="small fw-semibold"
+          :class="variationClass"
+        >
+          {{ variationSign }}
+          {{ Math.abs(variation).toFixed(2) }}%
+        </span>
       </div>
 
       <div
@@ -41,6 +49,7 @@ const props = defineProps({
   rate: Number,
   value: Number,
   diff: Number,
+  variation: Number,
   mode: String,
   highlight: Boolean,
   hot: Boolean
@@ -53,6 +62,18 @@ const unit = computed(() =>
 const formattedValue = computed(() =>
   props.value?.toFixed(2)
 );
+
+const variationSign = computed(() => {
+  if (props.variation > 0) return '▲'
+  if (props.variation < 0) return '▼'
+  return ''
+})
+
+const variationClass = computed(() => {
+  if (props.variation > 0) return 'text-success'
+  if (props.variation < 0) return 'text-danger'
+  return 'text-muted'
+})
 
 const diffClass = computed(() => ({
   "text-success": props.diff > 0,

@@ -56,6 +56,7 @@
             :rate="item.rate"
             :value="convert(base, item.rate, mode)"
             :diff="item.diff"
+            :variation="item.variation"
             :mode="mode"
             :highlight="item.key === bestRateKey"
             :updatedAt="item.updatedAt"
@@ -109,12 +110,14 @@ const rateList = computed(() => {
         {
           key: "usd",
           label: "USD Oficial",
-          rate: rates.value.bcv.usd
+          rate: rates.value.bcv.usd,
+          variation: rates.value.bcv.changePercentage.usd
         },
         {
           key: "eur",
           label: "EUR Oficial",
-          rate: rates.value.bcv.eur
+          rate: rates.value.bcv.eur,
+          variation: rates.value.bcv.changePercentage.eur
         }
       ],
     },
