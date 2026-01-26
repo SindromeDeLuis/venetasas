@@ -40,7 +40,7 @@
         :value="mode"
         @change="onModeChange"
       >
-        <option value="USD">$ USD → Bs</option>
+        <option value="USD">USD → Bs</option>
         <option value="VES">Bs → USD</option>
       </select>
     </div>
