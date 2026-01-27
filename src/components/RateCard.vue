@@ -17,7 +17,7 @@
           </span>
           
           <button
-            class="btn btn-sm btn-outline-secondary ms-2 p-1 border-0"
+            class="btn btn-sm btn-outline-secondary ms-2 p-1 border-0 no-capture"
             :class="copied ? 'btn-success' : 'btn-outline-secondary'"
             @click="copyValue"
             title="Copiar monto"
@@ -50,7 +50,7 @@
     </div>
 
     <button
-      class="btn btn-sm btn-outline-secondary position-absolute bottom-0 end-0 m-2 border-0 p-1"
+      class="btn btn-sm btn-outline-secondary position-absolute bottom-0 end-0 m-2 border-0 p-0 no-capture"
       @click="shareCard"
       title="Compartir"
     >
@@ -71,7 +71,8 @@ const props = defineProps({
   variation: Number,
   mode: String,
   highlight: Boolean,
-  hot: Boolean
+  hot: Boolean,
+  updatedAt: String
 });
 
 const copied = ref(false);
@@ -89,7 +90,23 @@ function copyValue() {
 async function shareCard() {
   const canvas = await html2canvas(cardRef.value, {
     backgroundColor: null,
-    scale: 2
+    scale: 2,
+    ignoreElements: (el) => el.classList.contains("no-capture"),
+    onclone: (clonedDoc) => {
+      const clonedCard = clonedDoc.querySelector(".rate-card");
+
+      if (clonedCard) {
+        const dateDiv = clonedDoc.createElement("div");
+        dateDiv.style.fontSize = "12px";
+        dateDiv.style.color = "#666";
+        dateDiv.style.marginTop = "8px";
+        dateDiv.style.textAlign = "center";
+
+        dateDiv.innerText = `Actualizado: ${props.updatedAt}`;
+
+        clonedCard.appendChild(dateDiv);
+      }
+    }
   });
 
   const blob = await new Promise(resolve =>
@@ -99,8 +116,8 @@ async function shareCard() {
   const file = new File([blob], "venetasas.png", { type: "image/png" });
 
   const text = `${props.title}
-Tasa: ${props.rate}
-Monto: ${formattedValue.value}
+Monto: ${formattedValue.value} ${unit.value}
+Tasa: ${props.rate.toFixed(2)}
 Actualizado: ${props.updatedAt}`;
 
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
