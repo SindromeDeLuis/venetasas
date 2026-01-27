@@ -15,6 +15,15 @@
           <span class="fs-6 text-muted">
             {{ unit }}
           </span>
+          
+          <button
+            class="btn btn-sm btn-outline-dark ms-2 p-1"
+            @click="copyValue"
+            title="Copiar monto"
+          >
+            <span v-if="copied">✅</span>
+            <span v-else>📋</span>
+          </button>
         </div>
       </Transition>
 
@@ -42,7 +51,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   title: String,
@@ -54,6 +63,17 @@ const props = defineProps({
   highlight: Boolean,
   hot: Boolean
 });
+
+const copied = ref(false);
+
+function copyValue() {
+  navigator.clipboard.writeText(formattedValue.value);
+  copied.value = true;
+
+  setTimeout(() => {
+    copied.value = false;
+  }, 1500);
+}
 
 const unit = computed(() =>
   props.mode === "USD" ? "Bs" : "$"
