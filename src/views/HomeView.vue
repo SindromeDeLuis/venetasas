@@ -61,7 +61,7 @@
             :variation="item.variation"
             :mode="mode"
             :highlight="item.key === bestRateKey"
-            :updatedAt="item.updatedAt"
+            :updatedAt="section.updatedAt"
             :hot="item.diff && Math.abs(item.diff) <= HOT_THRESHOLD"
           />
         </div>
