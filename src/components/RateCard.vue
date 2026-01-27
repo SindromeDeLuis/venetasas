@@ -1,5 +1,5 @@
 <template>
-  <div class="card rate-card h-100 shadow-sm" :class="{ 'best-rate': highlight }">
+  <div ref="cardRef" class="card rate-card h-100 shadow-sm position-relative" :class="{ 'best-rate': highlight }">
     <div class="card-body p-2">
       <h6 class="card-title mb-1 d-flex align-items-center gap-1">
         {{ title }}
@@ -17,7 +17,8 @@
           </span>
           
           <button
-            class="btn btn-sm btn-outline-dark ms-2 p-1"
+            class="btn btn-sm btn-outline-secondary ms-2 p-1 border-0"
+            :class="copied ? 'btn-success' : 'btn-outline-secondary'"
             @click="copyValue"
             title="Copiar monto"
           >
@@ -47,11 +48,20 @@
         {{ diff.toFixed(2) }}%
       </div>
     </div>
+
+    <button
+      class="btn btn-sm btn-outline-secondary position-absolute bottom-0 end-0 m-2 border-0 p-1"
+      @click="shareCard"
+      title="Compartir"
+    >
+      📤
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
+import html2canvas from "html2canvas";
 
 const props = defineProps({
   title: String,
@@ -65,6 +75,7 @@ const props = defineProps({
 });
 
 const copied = ref(false);
+const cardRef = ref(null);
 
 function copyValue() {
   navigator.clipboard.writeText(formattedValue.value);
@@ -73,6 +84,36 @@ function copyValue() {
   setTimeout(() => {
     copied.value = false;
   }, 1500);
+}
+
+async function shareCard() {
+  const canvas = await html2canvas(cardRef.value, {
+    backgroundColor: null,
+    scale: 2
+  });
+
+  const blob = await new Promise(resolve =>
+    canvas.toBlob(resolve, "image/png")
+  );
+
+  const file = new File([blob], "venetasas.png", { type: "image/png" });
+
+  const text = `${props.title}
+Tasa: ${props.rate}
+Monto: ${formattedValue.value}
+Actualizado: ${props.updatedAt}`;
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      title: "VeneTasas",
+      text,
+      files: [file]
+    });
+  } else {
+    // fallback: copiar texto
+    await navigator.clipboard.writeText(text);
+    alert("Texto copiado para compartir");
+  }
 }
 
 const unit = computed(() =>
