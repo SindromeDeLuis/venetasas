@@ -1,5 +1,5 @@
 <template>
-  <div ref="cardRef" class="card rate-card h-100 shadow-sm position-relative" :class="{ 'best-rate': highlight }">
+  <div ref="cardRef" :id="`rate-card-${title.replace(/\s+/g, '')}`" class="card rate-card h-100 shadow-sm position-relative" :class="{ 'best-rate': highlight }">
     <div class="card-body p-2">
       <h6 class="card-title mb-1 d-flex align-items-center gap-1">
         {{ title }}
@@ -93,7 +93,19 @@ async function shareCard() {
     backgroundColor: null,
     scale: 2,
     logging: true,
-    ignoreElements: (el) => el.classList.contains("no-capture")
+    ignoreElements: (el) => el.classList.contains("no-capture"),
+
+    onclone: (clonedDoc) => {
+      const clonedCard = clonedDoc.querySelector("#rate-card-" + props.title.replace(/\s+/g, ''));
+      const body = clonedCard.querySelector(".card-body");
+
+      const dateDiv = clonedDoc.createElement("div");
+      dateDiv.className = "small text-muted";
+
+      dateDiv.innerText = `Actualizado: ${formattedDate.value}`;
+
+      body.appendChild(dateDiv);
+    }
   });
 
   const blob = await new Promise(resolve =>
@@ -152,6 +164,14 @@ const formattedDate = computed(() =>
 </script>
 
 <style scoped>
+.capture-date {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  opacity: 0;          /* invisible en UI */
+  pointer-events: none;
+}
+
 .hot-emoji {
   animation: pulse 1.2s infinite;
 }
