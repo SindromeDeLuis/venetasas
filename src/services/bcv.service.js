@@ -5,7 +5,11 @@ const API_URL = "https://api.dolarvzla.com/public/exchange-rate";
  * @returns {Promise<{usd:number, eur:number, date:string}>}
  */
 export async function getBCVRates() {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    headers: {
+      "x-dolarvzla-key": import.meta.env.VITE_DOLARVZLA_KEY,
+    },
+  });
 
   if (!response.ok) {
     throw new Error("No se pudieron obtener las tasas BCV");
