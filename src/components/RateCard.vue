@@ -62,6 +62,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import html2canvas from "html2canvas";
+import { formatDate } from '@/utils/date';
 
 const props = defineProps({
   title: String,
@@ -91,22 +92,8 @@ async function shareCard() {
   const canvas = await html2canvas(cardRef.value, {
     backgroundColor: null,
     scale: 2,
-    ignoreElements: (el) => el.classList.contains("no-capture"),
-    onclone: (clonedDoc) => {
-      const clonedCard = clonedDoc.querySelector(".rate-card");
-
-      if (clonedCard) {
-        const dateDiv = clonedDoc.createElement("div");
-        dateDiv.style.fontSize = "12px";
-        dateDiv.style.color = "#666";
-        dateDiv.style.marginTop = "8px";
-        dateDiv.style.textAlign = "center";
-
-        dateDiv.innerText = `Actualizado: ${props.updatedAt}`;
-
-        clonedCard.appendChild(dateDiv);
-      }
-    }
+    logging: true,
+    ignoreElements: (el) => el.classList.contains("no-capture")
   });
 
   const blob = await new Promise(resolve =>
@@ -118,7 +105,7 @@ async function shareCard() {
   const text = `${props.title}
 Monto: ${formattedValue.value} ${unit.value}
 Tasa: ${props.rate.toFixed(2)}
-Actualizado: ${props.updatedAt}`;
+${props.updatedAt ? "Actualizado: " + formattedDate.value : ""}`;
 
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     await navigator.share({
@@ -158,6 +145,10 @@ const diffClass = computed(() => ({
   "text-success": props.diff > 0,
   "text-danger": props.diff < 0
 }));
+
+const formattedDate = computed(() =>
+  formatDate(props.updatedAt)
+)
 </script>
 
 <style scoped>
