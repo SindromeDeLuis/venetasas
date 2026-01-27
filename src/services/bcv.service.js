@@ -1,18 +1,14 @@
-const API_URL = "https://api.dolarvzla.com/public/exchange-rate";
+const PROXY_URL = "/.netlify/functions/bcv";
 
 /**
  * Obtiene las tasas oficiales del BCV
  * @returns {Promise<{usd:number, eur:number, date:string}>}
  */
 export async function getBCVRates() {
-  const response = await fetch(API_URL, {
-    headers: {
-      "x-dolarvzla-key": import.meta.env.VITE_DOLARVZLA_KEY,
-    },
-  });
+  const response = await fetch(PROXY_URL);
 
   if (!response.ok) {
-    throw new Error("No se pudieron obtener las tasas BCV");
+    throw new Error("Error proxy BCV");
   }
 
   const data = await response.json();
