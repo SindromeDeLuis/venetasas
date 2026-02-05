@@ -1,28 +1,15 @@
 <template>
   <div class="container py-3 min-vh-100">
     
-    <header class="app-header d-flex align-items-center justify-content-between mb-3">
-      <!-- Header -->
-      <div class="mb-1">
-        <h1 class="fw-bold">Tasas de cambio VES</h1>
-        <p class="text-muted mb-0">
-          BCV vs Binance P2P
-        </p>
-      </div>
-      
-      <button
-        class="btn btn-sm btn-outline-secondary theme-toggle"
-        @click="toggleTheme"
-      >
-        {{ theme === "dark" ? "🌙" : "☀️" }}
-      </button>
-    </header>
+    <div class="app-header2">
+      <Header />
 
-    <!-- Input base -->
-    <BaseInput
-      v-model="base"
-      v-model:mode="mode"
-    />
+      <!-- Input base -->
+      <BaseInput
+        v-model="base"
+        v-model:mode="mode"
+      />
+    </div>
 
     <!-- Loader -->
     <div v-if="loading" class="text-center py-3">
@@ -37,7 +24,7 @@
     <div
       v-for="section in rateList"
       :key="section.key"
-      class="mb-4"
+      class="mb-4 px-1"
     >
 
       <!-- Header de la sección -->
@@ -73,6 +60,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 
+import Header from "@/components/global/Header.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import RateCard from "@/components/RateCard.vue";
 import SectionHeader from '@/components/SectionHeader.vue'
@@ -83,10 +71,6 @@ import {
   cashBuyPrice,
   convert
 } from "@/utils/calculations";
-
-import { useTheme } from "@/composables/useTheme";
-
-const { theme, toggleTheme } = useTheme();
 
 const base = ref(1);
 const mode = ref("USD");
