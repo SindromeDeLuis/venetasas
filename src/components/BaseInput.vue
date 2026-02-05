@@ -1,5 +1,5 @@
 <template>
-  <div class="row g-2 pb-3 px-1 align-items-end">
+  <div class="row g-2 mb-3 px-1 align-items-end">
     <!-- Cantidad -->
     <div class="col-8 col-md-9">
       <label class="form-label fw-semibold" for="cantidad">
