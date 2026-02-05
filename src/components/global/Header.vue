@@ -31,7 +31,7 @@ const { theme, toggleTheme } = useTheme();
 /* Tipografía refinada para títulos de Android */
 .header-content h1 {
   letter-spacing: 0.15px;
-  font-size: 1.15rem;
+  font-size: 1.20rem;
 }
 
 .header-content p {
