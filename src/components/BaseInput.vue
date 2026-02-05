@@ -1,16 +1,16 @@
 <template>
-  <div class="row g-2 mb-3 align-items-end">
+  <div class="row g-2 pb-3 px-1 align-items-end">
     <!-- Cantidad -->
     <div class="col-8 col-md-9">
       <label class="form-label fw-semibold" for="cantidad">
         Cantidad
       </label>
 
-      <div class="input-group input-group-sm">
+      <div class="input-group">
         <input
           type="number"
           id="cantidad"
-          class="form-control form-control-sm"
+          class="form-control"
           min="0"
           step="0.01"
           :value="modelValue"
@@ -21,7 +21,7 @@
         <button
           :disabled="modelValue === 1"
           type="button"
-          class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center"
+          class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
           @click="reset"
           aria-label="Reiniciar valor"
         >
@@ -36,7 +36,7 @@
         Calcular en
       </label>
       <select
-        class="form-select form-select-sm"
+        class="form-select"
         :value="mode"
         @change="onModeChange"
       >
