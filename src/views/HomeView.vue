@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-3 min-vh-100">
+  <div class="container min-vh-100">
     
     <div class="app-header2">
       <Header />
