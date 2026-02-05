@@ -1,8 +1,7 @@
 <template>
-  <div class="container min-vh-100">
+  <div class="container">
     
     <div class="app-header2">
-      <Header />
 
       <!-- Input base -->
       <BaseInput
@@ -60,7 +59,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 
-import Header from "@/components/global/Header.vue";
 import BaseInput from "@/components/BaseInput.vue";
 import RateCard from "@/components/RateCard.vue";
 import SectionHeader from '@/components/SectionHeader.vue'

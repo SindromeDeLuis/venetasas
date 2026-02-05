@@ -1,5 +1,5 @@
 <template>
-  <header class="app-header d-flex align-items-center px-1">
+  <header class="container app-header d-flex align-items-center px-3">
     <div class="header-content flex-grow-1">
       <h1 class="h5 fw-bold mb-0 text-truncate">VeneTasas</h1>
     </div>

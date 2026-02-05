@@ -1,9 +1,14 @@
 <template>
-  <main class="min-vh-100">
-    <HomeView />
+  <Header />
+
+  <main class="app-main">
+    <router-view />
   </main>
+
+  <BottomNav />
 </template>
 
 <script setup>
-import HomeView from "@/views/HomeView.vue";
+import Header from "@/components/global/Header.vue";
+import BottomNav from "@/components/global/BottomNav.vue";
 </script>

@@ -26,6 +26,11 @@ body {
   padding: 0;
 }
 
+.app-main {
+  overflow-y: auto;
+  height: calc(100vh - 120px);
+}
+
 .rate-card {
   border-radius: 0.75rem;
 }
