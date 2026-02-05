@@ -13,6 +13,7 @@
       "dependencies": [
         "npm:@vitejs/plugin-vue@^6.0.1",
         "npm:bootstrap@^5.3.8",
+        "npm:html2canvas@^1.4.1",
         "npm:vite-plugin-pwa@^1.2.0",
         "npm:vite@^7.2.4",
         "npm:vue@^3.5.24"
