@@ -1,26 +1,30 @@
 export async function handler(event) {
-  const { path, start_date, end_date } = event.queryStringParameters;
-
-  let url = "https://bcv-api.rafnixg.dev";
-
-  // Últimos 30 días
-  if (path === "history") {
-    url += "/rates/history";
-  }
-
-  // Rango
-  if (start_date && end_date) {
-    url += `/rates/history?start_date=${start_date}&end_date=${end_date}`;
-  }
-
-  // Fecha específica
-  if (path && path !== "history") {
-    url += `/rates/${path}`;
-  }
+  const API_URL = "https://bcv-api.rafnixg.dev";
 
   try {
-    const res = await fetch(url);
-    const data = await res.json();
+    const {
+      path,
+      start_date,
+      end_date
+    } = event.queryStringParameters || {};
+
+    // Últimos 30 días
+    if (path === "history") {
+      API_URL += "/rates/history";
+    }
+
+    // Rango
+    if (start_date && end_date) {
+      API_URL += `/rates/history?start_date=${start_date}&end_date=${end_date}`;
+    }
+
+    // Fecha específica
+    if (path && path !== "history") {
+      API_URL += `/rates/${path}`;
+    }
+
+    const response = await fetch(API_URL);
+    const data = await response.json();
 
     return {
       statusCode: 200,
