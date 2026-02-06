@@ -25,15 +25,21 @@ export async function handler(event) {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
     };
 
-  } catch (err) {
+  } catch (error) {
+    console.error("Function error:", error);
+
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Error BCV API" })
+      body: JSON.stringify({
+        error: "Internal Server Error",
+        detail: error.message
+      })
     };
   }
 }
