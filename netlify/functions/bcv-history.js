@@ -21,6 +21,8 @@ export async function handler(event) {
       finalUrl.pathname = `/rates/${path}`;
     }
 
+    console.log("Final API URL:", finalUrl.toString());
+
     const response = await fetch(finalUrl.toString(), {
       headers: {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -31,7 +33,11 @@ export async function handler(event) {
     if (!response.ok) {
       return {
         statusCode: response.status,
-        body: JSON.stringify({ error: "Error desde la API externa" })
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: JSON.stringify({ 
+          error: "La API externa rechazó la conexión", 
+          status: response.status 
+        })
       };
     }
 
@@ -51,6 +57,7 @@ export async function handler(event) {
 
     return {
       statusCode: 500,
+      headers: { "Access-Control-Allow-Origin": "*" },
       body: JSON.stringify({
         error: "Internal Server Error",
         detail: error.message
