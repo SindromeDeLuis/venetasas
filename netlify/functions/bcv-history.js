@@ -1,5 +1,5 @@
 export async function handler(event) {
-  const API_URL = "https://bcv-api.rafnixg.dev";
+  let API_URL = "https://bcv-api.rafnixg.dev";
 
   try {
     const {
