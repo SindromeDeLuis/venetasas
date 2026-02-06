@@ -2,8 +2,7 @@ const PROXY_URL = "/.netlify/functions/bcv-history";
 
 // Fecha específica
 export async function getRateByDate(date) {
-  const url = `${PROXY_URL}?path=${date}`;
-  const response = await fetch(url);
+  const response = await fetch(`${PROXY_URL}?path=${date}`);
 
   if (!response.ok) {
     throw new Error("Error proxy BCV History");

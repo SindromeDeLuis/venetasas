@@ -8,22 +8,28 @@ export async function handler(event) {
       end_date
     } = event.queryStringParameters || {};
 
-    // Últimos 30 días
-    if (path === "history") {
-      API_URL += "/rates/history";
-    }
+    let finalUrl = new URL(API_URL);
 
-    // Rango
+    // Lógica de rutas (Prioridad: Rango > Historial > Fecha única)
     if (start_date && end_date) {
-      API_URL += `/rates/history?start_date=${start_date}&end_date=${end_date}`;
+      finalUrl.pathname = "/rates/history";
+      finalUrl.searchParams.set("start_date", start_date);
+      finalUrl.searchParams.set("end_date", end_date);
+    } else if (path === "history") {
+      finalUrl.pathname = "/rates/history";
+    } else if (path) {
+      finalUrl.pathname = `/rates/${path}`;
     }
 
-    // Fecha específica
-    if (path && path !== "history") {
-      API_URL += `/rates/${path}`;
+    const response = await fetch(finalUrl.toString());
+
+    if (!response.ok) {
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({ error: "Error desde la API externa" })
+      };
     }
 
-    const response = await fetch(API_URL);
     const data = await response.json();
 
     return {
