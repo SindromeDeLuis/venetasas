@@ -21,7 +21,12 @@ export async function handler(event) {
       finalUrl.pathname = `/rates/${path}`;
     }
 
-    const response = await fetch(finalUrl.toString());
+    const response = await fetch(finalUrl.toString(), {
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0"
+      }
+    });
 
     if (!response.ok) {
       return {
