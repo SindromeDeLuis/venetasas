@@ -18,3 +18,18 @@ export function formatDate(dateStr) {
     minute: '2-digit'
   })
 }
+
+// Función para obtener la fecha actual en formato dd-mm-yyyy
+export function getTodayFormatted() {
+    const today = new Date();
+
+    let day = today.getDate();
+    let month = today.getMonth() + 1; // Los meses van de 0 a 11
+    const year = today.getFullYear();
+
+    // Asegurar que día y mes tengan dos dígitos
+    day = day < 10 ? '0' + day : day;
+    month = month < 10 ? '0' + month : month;
+
+    return `${year}-${month}-${day}`;
+}
