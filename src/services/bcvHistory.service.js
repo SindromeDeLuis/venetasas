@@ -10,12 +10,12 @@ export async function getRateByDate(date) {
 
   const data = await response.json();
 
-  return [data];
+  return data.rates;
 }
 
 // Últimos 30 días
-export async function getLast30Days() {
-  const response = await fetch(`${PROXY_URL}?path=history`);
+export async function getLast30Days(today) {
+  const response = await fetch(`${PROXY_URL}?path=history&today=${today}`);
 
   if (!response.ok) {
     throw new Error("Error proxy BCV History");

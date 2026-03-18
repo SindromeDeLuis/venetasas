@@ -1,35 +1,44 @@
 export async function handler(event) {
-  let API_URL = "https://bcv-api.rafnixg.dev";
+  let API_URL = "https://api.dolarvzla.com/public/exchange-rate";
+  const KEY = process.env.DOLARVZLA_KEY
+
+  if (!KEY) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Missing API key" })
+    };
+  }
 
   try {
     const {
       path,
+      today,
       start_date,
       end_date
     } = event.queryStringParameters || {};
 
     let finalUrl = new URL(API_URL);
+    finalUrl.pathname = "/public/exchange-rate/list";
 
     // Lógica de rutas (Prioridad: Rango > Historial > Fecha única)
     if (start_date && end_date) {
-      finalUrl.pathname = "/rates/history";
-      finalUrl.searchParams.set("start_date", start_date);
-      finalUrl.searchParams.set("end_date", end_date);
+      finalUrl.searchParams.set("from", start_date);
+      finalUrl.searchParams.set("to", end_date);
     } else if (path === "history") {
-      finalUrl.pathname = "/rates/history";
+      const date = new Date(today);
+      date.setDate(date.getDate() - 30);
+      finalUrl.searchParams.set("from", date.toISOString().split('T')[0]);
+      finalUrl.searchParams.set("to", today);
     } else if (path) {
-      finalUrl.pathname = `/rates/${path}`;
+      finalUrl.searchParams.set("from", path);
+      finalUrl.searchParams.set("to", path);
     }
 
     console.log("Final API URL:", finalUrl.toString());
 
     const response = await fetch(finalUrl.toString(), {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-        "Accept": "application/json, text/plain, */*",
-        "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
-        "Referer": "https://www.google.com/",
-        "Origin": "https://venetasas.netlify.app"
+        "x-dolarvzla-key": KEY,
       }
     });
 

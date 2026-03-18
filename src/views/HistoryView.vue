@@ -1,6 +1,6 @@
 <template>
-  <div class="container py-3 mb-5">
-    <div class="d-flex align-items-center mb-4">
+  <div class="container">
+    <div class="d-flex align-items-center pt-2 mb-3">
       <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
         <span class="fs-4">📜</span>
       </div>
@@ -10,9 +10,9 @@
       </div>
     </div>
 
-    <div class="card border-0 shadow-sm mb-4 rounded-4">
+    <div class="card border-0 shadow-sm mb-2 rounded-4">
       <div class="card-body p-3">
-        <div class="btn-group w-100 mb-3 p-1 bg-light rounded-3" role="group">
+        <div class="btn-group w-100 mb-2 p-1 bg-light rounded-3" role="group">
           <input type="radio" class="btn-check" name="mode" id="m30" value="30" v-model="mode">
           <label class="btn btn-sm border-0 rounded-3 py-2" for="m30">30 Días</label>
           
@@ -23,7 +23,7 @@
           <label class="btn btn-sm border-0 rounded-3 py-2" for="mRange">Rango</label>
         </div>
 
-        <div class="row g-2 mb-3">
+        <div class="row g-2 mb-2">
           <div v-if="mode === 'date'" class="col-12">
             <input type="date" v-model="date" class="form-control border-light-subtle" />
           </div>
@@ -67,18 +67,20 @@
 
     <Transition name="fade" mode="out-in">
       <div v-if="!loading && rates.length">
-        <div v-if="view === 'table'" class="table-responsive rounded-4 shadow-sm bg-white p-2">
+        <div v-if="view === 'table'" class="table-responsive rounded-4 shadow-sm p-2">
           <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+            <thead class="table-dark">
               <tr>
                 <th class="border-0 rounded-start ps-3">Fecha</th>
-                <th class="border-0 text-end pe-3">Tasa (USD)</th>
+                <th class="border-0 text-end pe-3">USD</th>
+                <th class="border-0 text-end pe-3">EUR</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="r in rates" :key="r.date">
                 <td class="ps-3 py-3 fw-medium">{{ r.date }}</td>
-                <td class="text-end pe-3 fw-bold text-primary">{{ r.dollar.toFixed(2) }} <small class="text-muted">Bs</small></td>
+                <td class="text-end pe-3 fw-bold text-primary">{{ r.usd?.toFixed(2) }} <small class="text-muted">Bs</small></td>
+                <td class="text-end pe-3 fw-bold text-success">{{ r.eur?.toFixed(2) }} <small class="text-muted">Bs</small></td>
               </tr>
             </tbody>
           </table>
@@ -102,6 +104,7 @@
 import { ref, watch, nextTick, onMounted } from "vue";
 import Chart from "chart.js/auto";
 import { getRateByDate, getLast30Days, getRange } from "@/services/bcvHistory.service";
+import { getTodayFormatted } from "@/utils/date";
 
 const mode = ref("30");
 const view = ref("chart"); // Por defecto gráfica es más atractivo
@@ -111,6 +114,7 @@ const chartRef = ref(null);
 let chartInstance = null;
 
 // Dates
+const today = getTodayFormatted();
 const date = ref(new Date().toISOString().split('T')[0]);
 const startDate = ref("");
 const endDate = ref("");
@@ -120,7 +124,7 @@ async function loadData() {
     loading.value = true;
     let data = [];
 
-    if (mode.value === "30") data = await getLast30Days();
+    if (mode.value === "30") data = await getLast30Days(today);
     else if (mode.value === "date" && date.value) data = await getRateByDate(date.value);
     else if (mode.value === "range" && startDate.value && endDate.value) {
       data = await getRange(startDate.value, endDate.value);
@@ -128,6 +132,9 @@ async function loadData() {
 
     rates.value = Array.isArray(data) ? data : [data];
     
+    if (rates.value.length < 2) {
+      view.value = "table"; // Forzar tabla si no hay suficientes datos para gráfica
+    }
     if (view.value === "chart") await drawChart();
   } catch (err) {
     console.error(err);
@@ -149,16 +156,28 @@ async function drawChart() {
     type: "line",
     data: {
       labels: rates.value.map(r => r.date).reverse(),
-      datasets: [{
-        label: "USD BCV",
-        data: rates.value.map(r => r.dollar).reverse(),
-        borderColor: primaryColor,
-        backgroundColor: 'rgba(13, 110, 253, 0.1)',
-        fill: true,
-        tension: 0.4,
-        pointRadius: 4,
-        pointBackgroundColor: primaryColor
-      }]
+      datasets: [
+        {
+          label: "USD BCV",
+          data: rates.value.map(r => r.usd).reverse(),
+          borderColor: primaryColor,
+          backgroundColor: 'rgba(13, 110, 253, 0.1)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 2,
+          pointBackgroundColor: primaryColor
+        },
+        {
+          label: "EUR BCV",
+          data: rates.value.map(r => r.eur).reverse(),
+          borderColor: '#198754',
+          backgroundColor: 'rgba(25, 135, 84, 0.1)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 2,
+          pointBackgroundColor: primaryColor
+        }
+      ]
     },
     options: {
       responsive: true,
