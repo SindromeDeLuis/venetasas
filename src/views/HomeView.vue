@@ -16,10 +16,21 @@
     </div>
 
     <!-- Error -->
-    <div v-if="error" class="alert alert-danger">
-      {{ error }}
+    <div v-if="error" class="text-center py-5">
+      <div class="mb-3">
+        <span class="display-1 text-danger">⚠️</span>
+      </div>
+      <h4 class="fw-bold">¡Ups! Algo salió mal</h4>
+      <p class="text-muted">{{ error }}</p>
+      <button 
+        class="btn btn-primary rounded-pill px-4 mt-2 shadow-sm" 
+        @click="fetchRates"
+      >
+        🔄 Reintentar
+      </button>
     </div>
 
+    <!-- Rates -->
     <div
       v-for="section in rateList"
       :key="section.key"
@@ -184,21 +195,23 @@ const rateList = computed(() => {
   ];
 });
 
-
-onMounted(async () => {
+const fetchRates = async () => {
   loading.value = true;
   error.value = null;
+  rates.value = null; // Limpiamos datos previos
 
   try {
     rates.value = await getAllRates();
     bcvUpdatedAt.value = rates.value.bcv.updatedAt;
     binanceUpdatedAt.value = rates.value.binance.updatedAt;
   } catch (err) {
-    error.value = "No se pudieron cargar las tasas";
+    // Aquí puedes capturar el mensaje real si lo deseas
+    error.value = "No se pudieron cargar las tasas. Intenta de nuevo.";
+    console.error(err);
   } finally {
     loading.value = false;
   }
-});
+};
 
 const bestRateKey = computed(() => {
   const binanceSection = rateList.value.find(
@@ -216,4 +229,5 @@ const bestRateKey = computed(() => {
   return sorted[0].key;
 });
 
+onMounted(fetchRates);
 </script>
