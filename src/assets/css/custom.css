@@ -10,6 +10,10 @@ body {
   background-color: var(--bs-body-bg);
 }
 
+main > .container {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 3rem) !important;
+}
+
 .app-header2 {
   position: sticky;
   top: 0;

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container min-h-[100dvh]">
     <div class="d-flex align-items-center pt-2 mb-3">
       <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
         <span class="fs-4">📜</span>
