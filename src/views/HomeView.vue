@@ -87,6 +87,7 @@ const rates = ref(null);
 
 const bcvUpdatedAt = ref(null)
 const binanceUpdatedAt = ref(null)
+const airtmUpdatedAt = ref(null)
 
 const loading = ref(false);
 const error = ref(null);
@@ -138,7 +139,7 @@ const rateList = computed(() => {
             rates.value.binance.usdt.sell,
             rates.value.bcv.usd
           )
-        },
+        }/*,
         {
           key: "usdcbuy",
           label: "USDC Compra",
@@ -154,6 +155,31 @@ const rateList = computed(() => {
           rate: rates.value.binance.usdc.sell,
           diff: percentageDiff(
             rates.value.binance.usdc.sell,
+            rates.value.bcv.usd
+          )
+        },*/
+      ]
+    },
+    {
+      key: 'airtm',
+      title: 'AirTM',
+      updatedAt: airtmUpdatedAt.value,
+      items: [
+        {
+          key: "airtm_deposit",
+          label: "USDC Deposito",
+          rate: rates.value.airtm.usdc.buy,
+          diff: percentageDiff(
+            rates.value.airtm.usdc.buy,
+            rates.value.bcv.usd
+          )
+        },
+        {
+          key: "airtm_withdraw",
+          label: "USDC Retiro",
+          rate: rates.value.airtm.usdc.sell,
+          diff: percentageDiff(
+            rates.value.airtm.usdc.sell,
             rates.value.bcv.usd
           )
         },
@@ -204,6 +230,7 @@ const fetchRates = async () => {
     rates.value = await getAllRates();
     bcvUpdatedAt.value = rates.value.bcv.updatedAt;
     binanceUpdatedAt.value = rates.value.binance.updatedAt;
+    airtmUpdatedAt.value = rates.value.airtm.updatedAt;
   } catch (err) {
     // Aquí puedes capturar el mensaje real si lo deseas
     error.value = "No se pudieron cargar las tasas. Intenta de nuevo.";
