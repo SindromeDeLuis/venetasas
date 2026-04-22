@@ -13,7 +13,7 @@ export async function handler(event) {
       tradeType,
       page: 1,
       rows: 5,
-      payTypes: ["PagoMovil"],
+      payTypes: ["PagoMovil", "BANK", "BancoDeVenezuela", "Mercantil"],
       publisherType: null
     };
 
