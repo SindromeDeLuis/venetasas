@@ -1,20 +1,8 @@
 export async function handler() {
-  const API_URL = "https://api.dolarvzla.com/public/exchange-rate";
-  const KEY = process.env.DOLARVZLA_KEY
-
-  if (!KEY) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Missing API key" })
-    };
-  }
+  const API_URL = "https://rates.dolarvzla.com/bcv/current.json";
 
   try {
-    const response = await fetch(API_URL, {
-      headers: {
-        "x-dolarvzla-key": KEY,
-      }
-    });
+    const response = await fetch(API_URL);
 
     const data = await response.json();
 
