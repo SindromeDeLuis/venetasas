@@ -1,46 +1,28 @@
 export async function handler(event) {
-  let API_URL = "https://api.dolarvzla.com/public/exchange-rate";
-  const KEY = process.env.DOLARVZLA_KEY
-
-  if (!KEY) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Missing API key" })
-    };
-  }
+  let API_URL = "https://rates.dolarvzla.com";
 
   try {
     const {
       path,
-      today,
+      year,
       start_date,
       end_date
     } = event.queryStringParameters || {};
 
     let finalUrl = new URL(API_URL);
-    finalUrl.pathname = "/public/exchange-rate/list";
 
     // Lógica de rutas (Prioridad: Rango > Historial > Fecha única)
-    if (start_date && end_date) {
-      finalUrl.searchParams.set("from", start_date);
-      finalUrl.searchParams.set("to", end_date);
+    if (path === "range") {
+      finalUrl.pathname = `/bcv/${year}/list.json`;
     } else if (path === "history") {
-      const date = new Date(today);
-      date.setDate(date.getDate() - 30);
-      finalUrl.searchParams.set("from", date.toISOString().split('T')[0]);
-      finalUrl.searchParams.set("to", today);
+      finalUrl.pathname = `/bcv/${year}/list.json`;
     } else if (path) {
-      finalUrl.searchParams.set("from", path);
-      finalUrl.searchParams.set("to", path);
+      finalUrl.pathname = `/bcv/${path}.json`;
     }
 
     console.log("Final API URL:", finalUrl.toString());
 
-    const response = await fetch(finalUrl.toString(), {
-      headers: {
-        "x-dolarvzla-key": KEY,
-      }
-    });
+    const response = await fetch(finalUrl.toString());
 
     if (!response.ok) {
       return {

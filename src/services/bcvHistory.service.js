@@ -2,7 +2,11 @@ const PROXY_URL = "/.netlify/functions/bcv-history";
 
 // Fecha específica
 export async function getRateByDate(date) {
-  const response = await fetch(`${PROXY_URL}?path=${date}`);
+  let path = date.split("-")
+  path[1] = parseInt(path[1], 10).toString(); // Convertir el mes a número y luego a string
+  path[2] = parseInt(path[2], 10).toString();
+  path = path.join("/"); // Convertir "YYYY-MM-DD" a "YYYY/MM/DD"
+  const response = await fetch(`${PROXY_URL}?path=${path}`);
 
   if (!response.ok) {
     throw new Error("Error proxy BCV History");
@@ -10,12 +14,12 @@ export async function getRateByDate(date) {
 
   const data = await response.json();
 
-  return data.rates;
+  return data;
 }
 
 // Últimos 30 días
-export async function getLast30Days(today) {
-  const response = await fetch(`${PROXY_URL}?path=history&today=${today}`);
+export async function getLast30Days(year) {
+  const response = await fetch(`${PROXY_URL}?path=history&year=${year}`);
 
   if (!response.ok) {
     throw new Error("Error proxy BCV History");
@@ -23,14 +27,16 @@ export async function getLast30Days(today) {
 
   const data = await response.json();
 
-  return data.rates;
+  return data.slice(0, 30);
 }
 
 // Rango
 export async function getRange(start, end) {
-  const response = await fetch(
-    `${PROXY_URL}?start_date=${start}&end_date=${end}`
-  );
+  const year = start.split("-")[0];
+  const fechaInicio = new Date(start).getTime();
+  const fechaFin = new Date(end).getTime();
+
+  const response = await fetch(`${PROXY_URL}?path=range&year=${year}`);
 
   if (!response.ok) {
     throw new Error("Error proxy BCV History");
@@ -38,5 +44,9 @@ export async function getRange(start, end) {
 
   const data = await response.json();
 
-  return data.rates;
+  return data.filter(item => {
+    const tiempoItem = new Date(item.date).getTime();
+
+    return tiempoItem >= fechaInicio && tiempoItem <= fechaFin;
+  });
 }

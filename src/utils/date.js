@@ -33,3 +33,9 @@ export function getTodayFormatted() {
 
     return `${year}-${month}-${day}`;
 }
+
+// Función para obtener solo el año actual
+export function getTodayYear() {
+    const today = new Date();
+    return today.getFullYear();
+}

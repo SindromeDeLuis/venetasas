@@ -11,8 +11,8 @@
     </div>
 
     <div class="card border-0 shadow-sm mb-2 rounded-4">
-      <div class="card-body p-3">
-        <div class="btn-group w-100 mb-2 p-1 bg-light rounded-3" role="group">
+      <div class="card-body py-3">
+        <div class="btn-group w-100 mb-2 py-1 bg-light rounded-3" role="group">
           <input type="radio" class="btn-check" name="mode" id="m30" value="30" v-model="mode">
           <label class="btn btn-sm border-0 rounded-3 py-2" for="m30">30 Días</label>
           
@@ -28,13 +28,19 @@
             <input type="date" v-model="date" class="form-control border-light-subtle" />
           </div>
           <template v-if="mode === 'range'">
-            <div class="col-6">
-              <label class="small text-muted mb-1 ms-1">Desde</label>
-              <input type="date" v-model="startDate" class="form-control border-light-subtle" />
+            <div class="col-2">
+              <label class="small text-muted mb-1 ms-1">Año</label>
+              <select v-model="selectedYear" class="form-select border-light-subtle">
+                <option v-for="y in 5" :key="y" :value="getTodayYear() - y + 1">{{ getTodayYear() - y + 1 }}</option>
+              </select>
             </div>
-            <div class="col-6">
+            <div class="col-5">
+              <label class="small text-muted mb-1 ms-1">Desde</label>
+              <input type="date" :min="`${selectedYear}-01-01`" :max="`${selectedYear}-12-31`" v-model="startDate" class="form-control border-light-subtle" />
+            </div>
+            <div class="col-5">
               <label class="small text-muted mb-1 ms-1">Hasta</label>
-              <input type="date" v-model="endDate" class="form-control border-light-subtle" />
+              <input type="date" :min="`${selectedYear}-01-01`" :max="`${selectedYear}-12-31`" v-model="endDate" class="form-control border-light-subtle" />
             </div>
           </template>
         </div>
@@ -78,7 +84,7 @@
             </thead>
             <tbody>
               <tr v-for="r in rates" :key="r.date">
-                <td class="ps-3 py-3 fw-medium">{{ r.date }}</td>
+                <td class="ps-3 py-2 fw-medium">{{ r.date }}</td>
                 <td class="text-end pe-3 fw-bold text-primary">{{ r.usd?.toFixed(2) }} <small class="text-muted">Bs</small></td>
                 <td class="text-end pe-3 fw-bold text-success">{{ r.eur?.toFixed(2) }} <small class="text-muted">Bs</small></td>
               </tr>
@@ -104,7 +110,7 @@
 import { ref, watch, nextTick, onMounted } from "vue";
 import Chart from "chart.js/auto";
 import { getRateByDate, getLast30Days, getRange } from "@/services/bcvHistory.service";
-import { getTodayFormatted } from "@/utils/date";
+import { getTodayFormatted, getTodayYear } from "@/utils/date";
 
 const mode = ref("30");
 const view = ref("chart"); // Por defecto gráfica es más atractivo
@@ -114,17 +120,18 @@ const chartRef = ref(null);
 let chartInstance = null;
 
 // Dates
-const today = getTodayFormatted();
+const year = getTodayYear();
 const date = ref(new Date().toISOString().split('T')[0]);
 const startDate = ref("");
 const endDate = ref("");
+const selectedYear = ref(getTodayYear());
 
 async function loadData() {
   try {
     loading.value = true;
     let data = [];
 
-    if (mode.value === "30") data = await getLast30Days(today);
+    if (mode.value === "30") data = await getLast30Days(year);
     else if (mode.value === "date" && date.value) data = await getRateByDate(date.value);
     else if (mode.value === "range" && startDate.value && endDate.value) {
       data = await getRange(startDate.value, endDate.value);
@@ -207,6 +214,10 @@ watch(view, (newView) => {
 </script>
 
 <style scoped>
+.card-body {
+  padding: 0;
+}
+
 /* Segmented Control Custom */
 .btn-check:checked + .btn-white {
   background-color: white !important;
@@ -230,7 +241,8 @@ watch(view, (newView) => {
 }
 
 /* Estilo para los inputs de fecha en móviles */
-input[type="date"] {
+.form-select, 
+.form-control[type="date"] {
   min-height: 45px;
   border-radius: 12px;
 }
