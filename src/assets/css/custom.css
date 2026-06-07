@@ -14,15 +14,6 @@ main > .container {
   padding-bottom: calc(env(safe-area-inset-bottom) + 3rem) !important;
 }
 
-.app-header2 {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--bs-body-bg);
-  /*height: 88px;
-  border-bottom: 1px solid var(--bs-border-color);*/
-}
-
 .theme-toggle {
   border-radius: 50%;
   width: 36px;

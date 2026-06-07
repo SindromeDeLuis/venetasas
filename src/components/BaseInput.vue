@@ -1,48 +1,50 @@
 <template>
-  <div class="row g-2 mb-3 px-1 align-items-end">
-    <!-- Cantidad -->
-    <div class="col-6 col-md-9">
-      <label class="form-label fw-semibold text-nowrap" for="cantidad">
-        Cantidad
-      </label>
+  <div class="input-container">
+    <div class="row g-2 mb-3 px-1 align-items-end">
+      <!-- Cantidad -->
+      <div class="col-6 col-md-9">
+        <label class="form-label fw-semibold text-nowrap" for="cantidad">
+          Cantidad
+        </label>
 
-      <div class="input-group">
-        <input
-          type="number"
-          id="cantidad"
-          class="form-control"
-          min="0"
-          step="0.01"
-          :value="modelValue"
-          @input="onInput"
-        />
+        <div class="input-group">
+          <input
+            type="number"
+            id="cantidad"
+            class="form-control"
+            min="0"
+            step="0.01"
+            :value="modelValue"
+            @input="onInput"
+          />
 
-        <!-- Reset -->
-        <button
-          :disabled="modelValue === 1"
-          type="button"
-          class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
-          @click="reset"
-          aria-label="Reiniciar valor"
-        >
-          ⟲
-        </button>
+          <!-- Reset -->
+          <button
+            :disabled="modelValue === 1"
+            type="button"
+            class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+            @click="reset"
+            aria-label="Reiniciar valor"
+          >
+            ⟲
+          </button>
+        </div>
       </div>
-    </div>
 
-    <!-- Modo -->
-    <div class="col-6 col-md-3">
-      <label class="form-label fw-semibold text-nowrap">
-        Calcular
-      </label>
-      <select
-        class="form-select h-auto"
-        :value="mode"
-        @change="onModeChange"
-      >
-        <option value="USD">USD → Bs</option>
-        <option value="VES">Bs → USD</option>
-      </select>
+      <!-- Modo -->
+      <div class="col-6 col-md-3">
+        <label class="form-label fw-semibold text-nowrap">
+          Calcular
+        </label>
+        <select
+          class="form-select h-auto"
+          :value="mode"
+          @change="onModeChange"
+        >
+          <option value="USD">USD → Bs</option>
+          <option value="VES">Bs → USD</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -76,3 +78,14 @@ function reset() {
   emit('update:modelValue', 1)
 }
 </script>
+
+<style scoped> 
+.input-container {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bs-body-bg);
+  /*height: 88px;
+  border-bottom: 1px solid var(--bs-border-color);*/
+}
+</style>
