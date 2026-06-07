@@ -1,8 +1,8 @@
 <template>
   <div class="row g-2 mb-3 px-1 align-items-end">
     <!-- Cantidad -->
-    <div class="col-8 col-md-9">
-      <label class="form-label fw-semibold" for="cantidad">
+    <div class="col-6 col-md-9">
+      <label class="form-label fw-semibold text-nowrap" for="cantidad">
         Cantidad
       </label>
 
@@ -31,12 +31,12 @@
     </div>
 
     <!-- Modo -->
-    <div class="col-4 col-md-3">
-      <label class="form-label fw-semibold">
-        Calcular en
+    <div class="col-6 col-md-3">
+      <label class="form-label fw-semibold text-nowrap">
+        Calcular
       </label>
       <select
-        class="form-select"
+        class="form-select h-auto"
         :value="mode"
         @change="onModeChange"
       >
