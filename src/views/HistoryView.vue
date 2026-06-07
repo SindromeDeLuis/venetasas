@@ -28,17 +28,17 @@
             <input type="date" v-model="date" class="form-control border-light-subtle" />
           </div>
           <template v-if="mode === 'range'">
-            <div class="col-2">
+            <div class="col-3">
               <label class="small text-muted mb-1 ms-1">Año</label>
               <select v-model="selectedYear" class="form-select border-light-subtle">
                 <option v-for="y in 5" :key="y" :value="getTodayYear() - y + 1">{{ getTodayYear() - y + 1 }}</option>
               </select>
             </div>
-            <div class="col-5">
+            <div class="col-4">
               <label class="small text-muted mb-1 ms-1">Desde</label>
               <input type="date" :min="`${selectedYear}-01-01`" :max="`${selectedYear}-12-31`" v-model="startDate" class="form-control border-light-subtle" />
             </div>
-            <div class="col-5">
+            <div class="col-4">
               <label class="small text-muted mb-1 ms-1">Hasta</label>
               <input type="date" :min="`${selectedYear}-01-01`" :max="`${selectedYear}-12-31`" v-model="endDate" class="form-control border-light-subtle" />
             </div>
