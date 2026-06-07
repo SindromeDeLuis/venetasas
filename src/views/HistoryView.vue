@@ -12,7 +12,7 @@
 
     <div class="card border-0 shadow-sm mb-2 rounded-4">
       <div class="card-body py-3">
-        <div class="btn-group w-100 mb-2 py-1 bg-light rounded-3" role="group">
+        <div class="btn-group w-100 mb-2 p-1 bg-light rounded-3" role="group">
           <input type="radio" class="btn-check" name="mode" id="m30" value="30" v-model="mode">
           <label class="btn btn-sm border-0 rounded-3 py-2" for="m30">30 Días</label>
           
@@ -110,10 +110,10 @@
 import { ref, watch, nextTick, onMounted } from "vue";
 import Chart from "chart.js/auto";
 import { getRateByDate, getLast30Days, getRange } from "@/services/bcvHistory.service";
-import { getTodayFormatted, getTodayYear } from "@/utils/date";
+import { getTodayYear } from "@/utils/date";
 
 const mode = ref("30");
-const view = ref("chart"); // Por defecto gráfica es más atractivo
+const view = ref("table");
 const rates = ref([]);
 const loading = ref(false);
 const chartRef = ref(null);
