@@ -1,5 +1,5 @@
 export async function handler() {
-  const API_URL = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://www.bcv.org.ve/");
+  const API_URL = "https://www.bcv.org.ve/";
 
   try {
     const response = await fetch(API_URL, {
