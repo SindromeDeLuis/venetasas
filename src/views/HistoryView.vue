@@ -31,7 +31,7 @@
             <div class="col-4">
               <label class="small text-muted mb-1 ms-1">Año</label>
               <select v-model="selectedYear" class="form-select border-light-subtle">
-                <option v-for="y in 5" :key="y" :value="getTodayYear() - y + 1">{{ getTodayYear() - y + 1 }}</option>
+                <option v-for="y in 4" :key="y" :value="getTodayYear() - y + 1">{{ getTodayYear() - y + 1 }}</option>
               </select>
             </div>
             <div class="col-4">
