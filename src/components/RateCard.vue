@@ -99,12 +99,27 @@ async function shareCard() {
       const clonedCard = clonedDoc.querySelector("#rate-card-" + props.title.replace(/\s+/g, ''));
       const body = clonedCard.querySelector(".card-body");
 
+      clonedCard.classList.add("position-relative");
+
+      const logo = clonedDoc.createElement("img");
+      logo.src = "/logo.png"; // ruta desde public
+      logo.className = "position-absolute top-0 end-0 m-2";
+      logo.style.width = "28px"; // único inline aceptable (size)
+      logo.style.height = "auto";
+
+      clonedCard.appendChild(logo);
+
       const dateDiv = clonedDoc.createElement("div");
       dateDiv.className = "small text-muted";
-
-      dateDiv.innerText = `Actualizado: ${formattedDate.value}`;
+      dateDiv.innerText = `${formattedDate.value}`;
 
       body.appendChild(dateDiv);
+
+      const brand = clonedDoc.createElement("div");
+      brand.className = "small fw-semibold position-absolute bottom-0 end-0 m-2";
+      brand.innerText = "VeneTasas";
+
+      clonedCard.appendChild(brand);
     }
   });
 
@@ -164,14 +179,6 @@ const formattedDate = computed(() =>
 </script>
 
 <style scoped>
-.capture-date {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
-  opacity: 0;          /* invisible en UI */
-  pointer-events: none;
-}
-
 .hot-emoji {
   animation: pulse 1.2s infinite;
 }
