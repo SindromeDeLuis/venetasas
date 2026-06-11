@@ -4,9 +4,7 @@ export async function handler(event) {
   try {
     const {
       path,
-      year,
-      start_date,
-      end_date
+      year
     } = event.queryStringParameters || {};
 
     let finalUrl = new URL(API_URL);
@@ -19,8 +17,6 @@ export async function handler(event) {
     } else if (path) {
       finalUrl.pathname = `/bcv/${path}.json`;
     }
-
-    console.log("Final API URL:", finalUrl.toString());
 
     const response = await fetch(finalUrl.toString());
 
