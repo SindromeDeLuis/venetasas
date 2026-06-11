@@ -3,7 +3,7 @@ import HomeView from "@/views/HomeView.vue";
 import HistoryView from "@/views/HistoryView.vue";
 
 const routes = [
-  { path: "/", name: "home", component: HomeView },
+  { path: "/", redirect: "/rates" },
   { path: "/rates", name: "rates", component: HomeView },
   { path: "/history", name: "history", component: HistoryView }
 ];
