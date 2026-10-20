@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 
 import SectionHeader from '@/components/SectionHeader.vue'
 import RateCard from "@/components/RateCard.vue";
@@ -62,6 +62,7 @@ const props = defineProps({
 })
 
 const HOT_THRESHOLD = 35;
+const MAX_USDT = 96;
 
 const rateList = computed(() => {
   if (!props.rates) return [];
@@ -82,7 +83,11 @@ const rateList = computed(() => {
           key: "eur",
           label: "EUR Oficial",
           rate: props.rates.bcv.eur,
-          variation: props.rates.bcv.changePercentage.eur
+          variation: props.rates.bcv.changePercentage.eur,
+          diff: percentageDiff(
+            props.rates.bcv.eur,
+            props.rates.bcv.usd
+          )
         }
       ],
     },
@@ -158,6 +163,15 @@ const rateList = computed(() => {
       key: 'cash',
       title: 'Indicadores de compra en efectivo',
       items: [
+        {
+          key: "cashWU",
+          label: "WU",
+          rate: cashBuyPrice(props.rates.bcv.usd, -9) * 100 /96,
+          diff: percentageDiff(
+            cashBuyPrice(props.rates.bcv.usd, -9) * 100 / 96,
+            props.rates.bcv.usd
+          )
+        },
         {
           key: "cash5",
           label: "USDT -5%",
