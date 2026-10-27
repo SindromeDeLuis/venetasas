@@ -7,18 +7,19 @@
       v-model:mode="mode"
     />
 
-    <!-- Loader -->
-    <Loader :loading="loading" />
+    <!-- Skeleton -->
+    <RateSkeleton v-if="loading" />
 
     <!-- Error -->
     <Error
+      v-if="error"
       :error="error"
       @fetchRates="fetchRates"
     />
 
     <!-- Rates -->
     <RatesList 
-      v-if="rates" 
+      v-if="!loading && !error"
       :rates="rates" 
       :base="base" 
       :mode="mode"
@@ -30,7 +31,7 @@
 import { ref, onMounted } from "vue";
 
 import BaseInput from "@/components/BaseInput.vue";
-import Loader from "@/components/Loader.vue";
+import RateSkeleton from "@/components/RateSkeleton.vue";
 import Error from '@/components/Error.vue'
 import RatesList from '@/components/RatesList.vue'
 

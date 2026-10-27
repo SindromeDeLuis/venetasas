@@ -166,9 +166,9 @@ const rateList = computed(() => {
         {
           key: "cashWU",
           label: "WU",
-          rate: cashBuyPrice(props.rates.bcv.usd, -9) * 100 /96,
+          rate: cashBuyPrice(props.rates.bcv.usd, -9) * 100 / MAX_USDT,
           diff: percentageDiff(
-            cashBuyPrice(props.rates.bcv.usd, -9) * 100 / 96,
+            cashBuyPrice(props.rates.bcv.usd, -9) * 100 / MAX_USDT,
             props.rates.bcv.usd
           )
         },
